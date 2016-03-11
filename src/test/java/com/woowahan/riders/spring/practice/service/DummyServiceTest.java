@@ -1,5 +1,6 @@
 package com.woowahan.riders.spring.practice.service;
 
+import com.google.common.collect.Lists;
 import com.woowahan.riders.spring.practice.SpringPracticeApplication;
 import com.woowahan.riders.spring.practice.helloworld.domain.HelloWorld;
 import org.junit.Test;
@@ -36,5 +37,16 @@ public class DummyServiceTest {
         int size = helloWorlds.size();
         // Then
         assertThat("HelloWorld 객체개 미리 만들어짐", size, is(10));
+    }
+
+    @Test
+    public void testReadDummy2() throws Exception {
+        // Given
+        dummyService.writeDummy();
+        // When
+        Iterable<HelloWorld> helloWorlds = dummyService.readDummy2();
+        int size = Lists.newArrayList(helloWorlds).size();
+        // Then
+        assertThat("HelloWorld 객체개 미리 만들어짐", size, is(1));
     }
 }

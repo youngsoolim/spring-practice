@@ -6,33 +6,83 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 	}
+}
+
+ext {
+	queryDslVersion='3.7.2'
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot' 
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 jar {
 	baseName = 'spring-practice'
 	version = '0.0.1-SNAPSHOT'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+sourceSets {
+	generated {
+		java {
+			srcDirs = ['generated']
+		}
+	}
+}
+
+idea {
+	module {
+		sourceDirs += file('generated/')
+	}
+}
+
+configurations {
+	querydslapt
+}
 
 repositories {
 	mavenCentral()
 }
-
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile("org.springframework.boot:spring-boot-devtools")
+	compile("com.mysema.querydsl:querydsl-jpa:$queryDslVersion")
+	querydslapt("com.mysema.querydsl:querydsl-apt:$queryDslVersion")
 	runtime('com.h2database:h2')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
+}
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+	source = sourceSets.main.java
+	classpath = configurations.compile + configurations.querydslapt
+	options.compilerArgs = [
+			"-proc:only",
+			"-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+	]
+	destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+	dependsOn generateQueryDSL
+	source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+	dependsOn generateQueryDSL
+	options.warnings = false
+	classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+	delete sourceSets.generated.java.srcDirs
 }
 
 task wrapper(type: Wrapper) {
