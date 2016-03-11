@@ -1,6 +1,7 @@
 package com.woowahan.riders.spring.practice.service;
 
 import com.woowahan.riders.spring.practice.helloworld.domain.HelloWorld;
+import com.woowahan.riders.spring.practice.helloworld.domain.QHelloWorld;
 import com.woowahan.riders.spring.practice.helloworld.repository.HelloWorldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,11 @@ public class DummyService {
     @Transactional(readOnly = true)
     public List<HelloWorld> readDummy() {
         return helloWorldRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Iterable<HelloWorld> readDummy2() {
+        QHelloWorld helloWorld = QHelloWorld.helloWorld;
+        return helloWorldRepository.findAll(helloWorld.id.eq(1l));
     }
 }
