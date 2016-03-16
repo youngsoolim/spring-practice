@@ -13,11 +13,13 @@ public class Writer {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "writer", orphanRemoval = true)
-    private List<Site> siteList = new ArrayList<Site>();
+    private String nickname;
 
     @OneToMany(mappedBy = "writer", orphanRemoval = true)
-    private List<Post> postList = new ArrayList<Post>();
+    private List<Site> siteList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer", orphanRemoval = true)
+    private List<Post> postList = new ArrayList<>();
 
     void appendSite(Site site) {
         siteList.add(site);
@@ -37,5 +39,9 @@ public class Writer {
 
     public List<Post> getPostList() {
         return postList;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }
