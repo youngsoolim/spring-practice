@@ -58,7 +58,8 @@ dependencies {
 	querydslapt("com.mysema.querydsl:querydsl-apt:$queryDslVersion")
 	runtime('com.h2database:h2')
 
-	testCompile('org.springframework.boot:spring-boot-starter-test') 
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile("com.jayway.jsonpath:json-path")
 }
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {

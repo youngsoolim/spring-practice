@@ -26,7 +26,7 @@ public class Post {
     private Site site;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
-    private List<Comment> commentList = new ArrayList<Comment>();
+    private List<Comment> commentList = new ArrayList<>();
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDateTime;

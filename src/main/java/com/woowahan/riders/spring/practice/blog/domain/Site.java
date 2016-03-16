@@ -20,7 +20,7 @@ public class Site {
     private Writer writer;
 
     @OneToMany(mappedBy = "site", orphanRemoval = true)
-    private List<Post> postList = new ArrayList<Post>();
+    private List<Post> postList = new ArrayList<>();
 
     public static Site of(Writer writer, String endpoint) {
         Site site = new Site();
