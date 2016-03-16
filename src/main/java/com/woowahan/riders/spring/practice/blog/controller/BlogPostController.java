@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by leejaeil on 2016. 3. 16..
@@ -27,7 +28,12 @@ public class BlogPostController {
                 PostResponse.of(1l, "title 1", "content 1", new Date()),
                 PostResponse.of(2l, "title 2", "content 3", new Date())
         );
-        posts.stream().forEach(post -> logger.debug("{}", post));
+        posts.stream().forEach(new Consumer<PostResponse>() {
+            @Override
+            public void accept(PostResponse post) {
+                logger.debug("{}", post);
+            }
+        });
         return PostsResponse.of(posts);
     }
 

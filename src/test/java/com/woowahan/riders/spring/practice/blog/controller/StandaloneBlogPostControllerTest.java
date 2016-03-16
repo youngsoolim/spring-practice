@@ -42,7 +42,7 @@ public class StandaloneBlogPostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.post.title").value("title 1"));
+                .andExpect(jsonPath("$.title").value("title 1"));
     }
 
     @Test
