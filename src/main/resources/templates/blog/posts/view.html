@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Blog Posts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <!--/*@thymesVar id="post" type="com.woowahan.riders.spring.practice.blog.controller.dto.PostRequest"*/-->
+    <dl id="post">
+        <dt>제목</dt><dd class="_title" th:text="${post.title}"></dd>
+        <dt>내용</dt><dd><pre class="_content" th:text="${post.content}"></pre></dd>
+    </dl>
+</body>
+</html>

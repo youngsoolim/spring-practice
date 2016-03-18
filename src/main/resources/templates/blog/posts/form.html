@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Blog Posts</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+<!--/*@thymesVar id="post" type="com.woowahan.riders.spring.practice.blog.controller.dto.PostRequest"*/-->
+<form id="postForm" action="#" method="POST" th:action="@{form}" th:object="${post}" th:method="POST">
+    <dl>
+        <dt>제목</dt><dd><input type="text" th:type="text" th:field="*{title}" /></dd>
+        <dt>내용</dt><dd><textarea th:field="*{content}"></textarea></dd>
+    </dl>
+    <input type="submit" />
+</form>
+</body>
+</html>

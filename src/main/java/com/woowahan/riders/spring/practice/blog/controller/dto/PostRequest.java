@@ -8,6 +8,10 @@ public class PostRequest {
     private String title;
     private String content;
 
+    public static PostRequest empty() {
+        return new PostRequest();
+    }
+
     public Long getId() {
         return id;
     }

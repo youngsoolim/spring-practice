@@ -53,6 +53,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile("org.springframework.boot:spring-boot-starter-logging")
 	compile("org.springframework.boot:spring-boot-devtools")
 	compile("com.mysema.querydsl:querydsl-jpa:$queryDslVersion")
 	querydslapt("com.mysema.querydsl:querydsl-apt:$queryDslVersion")
@@ -60,6 +61,7 @@ dependencies {
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile("com.jayway.jsonpath:json-path")
+	testCompile("net.sourceforge.htmlunit:htmlunit:2.20")
 }
 
 task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {

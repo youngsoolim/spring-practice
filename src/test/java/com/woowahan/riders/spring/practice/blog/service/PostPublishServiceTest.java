@@ -22,8 +22,8 @@ public class PostPublishServiceTest {
     public void setUp() throws Exception {
         postPublishService = new PostPublishService() {
             @Override
-            public Optional<Post> writePost(Writer writer, Site site, String title, String content) {
-                return Optional.of(Post.of(writer, site, title, content));
+            public Optional<Post> writePost(Writer writer, String endpoint, String title, String content) {
+                return Optional.of(Post.of(writer, Site.of(writer, endpoint), title, content));
             }
         };
     }
@@ -34,13 +34,13 @@ public class PostPublishServiceTest {
         Writer writer = new Writer();
         Site site = Site.of(writer, "sonegy");
         // When
-        Optional<Post> newPost = postPublishService.writePost(writer, site, "title", "content");
+        Optional<Post> newPost = postPublishService.writePost(writer, site.getEndpoint(), "title", "content");
         // Then
         assertTrue(newPost.isPresent());
         newPost.ifPresent(post -> {
             assertThat(post.getTitle(), is("title"));
             assertThat(post.getContent(), is("content"));
-            assertThat(post.getSite(), is(site));
+            assertThat(post.getSite().getEndpoint(), is(site.getEndpoint()));
             assertThat(post.getWriter(), is(writer));
         });
     }

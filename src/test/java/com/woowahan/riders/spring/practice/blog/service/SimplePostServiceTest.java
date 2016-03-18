@@ -16,6 +16,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -29,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 @SpringApplicationConfiguration(classes = {SpringPracticeApplication.class})
 @WebAppConfiguration
 @Transactional
-public class SimpleBlogServiceTest {
+public class SimplePostServiceTest {
     PostPublishService postPublishService;
     PostSubscriptionService postSubscriptionService;
     WriterRepository writerRepository;
@@ -52,12 +55,12 @@ public class SimpleBlogServiceTest {
     @Test
     public void testWritePost() throws Exception {
         // Given
-        Writer writer = new Writer();
-        Site site = Site.of(writer, "sonegy");
+        Writer writer = writerRepository.save(new Writer());
+        Site site = siteRepository.save(Site.of(writer, "sonegy"));
         String title = "title";
         String content = "content";
         // When
-        Optional<Post> postOptional = postPublishService.writePost(writer, site, title, content);
+        Optional<Post> postOptional = postPublishService.writePost(writer, site.getEndpoint(), title, content);
         // Then
         assertTrue(postOptional.isPresent());
         postOptional.ifPresent(post -> {
@@ -88,5 +91,23 @@ public class SimpleBlogServiceTest {
             assertThat(present.getSite(), is(site));
             assertThat(present.getWriter(), is(writer));
         });
+    }
+
+    @Test
+    public void testReadAll() throws Exception {
+        // Given
+        Writer writer = writerRepository.save(new Writer());
+        String endpoint = "sonegy";
+        Site sonegy = siteRepository.save(Site.of(writer, endpoint));
+        postRepository.save(Arrays.asList(
+                Post.of(writer, sonegy, "title", "content"),
+                Post.of(writer, sonegy, "title", "content"),
+                Post.of(writer, sonegy, "title", "content"),
+                Post.of(writer, sonegy, "title", "content")
+        ));
+        // When
+        List<Post> posts = postSubscriptionService.readAll(endpoint);
+        // Then
+        assertThat(posts.size(), is(4));
     }
 }
