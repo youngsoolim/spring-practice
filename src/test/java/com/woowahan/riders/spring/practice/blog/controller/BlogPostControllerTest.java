@@ -49,7 +49,7 @@ public class BlogPostControllerTest {
 
     @Test
     public void testGetPosts() throws Exception {
-        mockMvc.perform(get("/blog/posts")
+        mockMvc.perform(get("/api/blog/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())

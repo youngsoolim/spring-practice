@@ -24,7 +24,7 @@ public class StandaloneBlogPostControllerTest {
 
     @Test
     public void testGetPosts() throws Exception {
-        mockMvc.perform(get("/blog/posts")
+        mockMvc.perform(get("/api/blog/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
@@ -36,7 +36,7 @@ public class StandaloneBlogPostControllerTest {
 
     @Test
     public void testView() throws Exception {
-        mockMvc.perform(get("/blog/posts/{id}", 1l)
+        mockMvc.perform(get("/api/blog/posts/{id}", 1l)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -47,7 +47,7 @@ public class StandaloneBlogPostControllerTest {
 
     @Test
     public void testWrite() throws Exception {
-        mockMvc.perform(post("/blog/posts")
+        mockMvc.perform(post("/api/blog/posts")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\n" +

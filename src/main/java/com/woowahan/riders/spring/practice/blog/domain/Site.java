@@ -14,6 +14,7 @@ public class Site {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String endpoint;
 
     @ManyToOne

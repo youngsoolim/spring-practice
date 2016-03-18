@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * Created by leejaeil on 2016. 3. 16..
  */
 @RestController
-@RequestMapping("blog/posts")
+@RequestMapping("api/blog/posts")
 public class BlogPostController {
     static final Logger logger = LoggerFactory.getLogger(BlogPostController.class);
 
@@ -28,12 +28,7 @@ public class BlogPostController {
                 PostResponse.of(1l, "title 1", "content 1", new Date()),
                 PostResponse.of(2l, "title 2", "content 3", new Date())
         );
-        posts.stream().forEach(new Consumer<PostResponse>() {
-            @Override
-            public void accept(PostResponse post) {
-                logger.debug("{}", post);
-            }
-        });
+        posts.stream().forEach(post -> logger.debug("{}", post));
         return PostsResponse.of(posts);
     }
 

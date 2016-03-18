@@ -6,6 +6,7 @@ import com.woowahan.riders.spring.practice.blog.domain.Writer;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,6 +32,11 @@ public class PostSubscriptionServiceTest {
                     return Optional.of(post1);
                 }
                 return Optional.empty();
+            }
+
+            @Override
+            public List<Post> readAll(String endpoint) {
+                return null;
             }
         };
     }
