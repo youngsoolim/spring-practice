@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class SimplePostService implements PostPublishService, PostSubscriptionService {
+public class SimplePostService implements PostPublishService, PostSubscriptionService, CommentOfPostService {
 
     @Autowired
     private PostRepository postRepository;
@@ -57,7 +57,7 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
     }
 
     @Override
-    public List<Comment> getCommentsOfPost(Post post) {
+    public List<Comment> readComments(Post post) {
         return commentRepository.findByPost(post);
     }
 }

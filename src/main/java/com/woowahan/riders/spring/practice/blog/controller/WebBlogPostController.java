@@ -6,6 +6,7 @@ import com.woowahan.riders.spring.practice.blog.controller.dto.PostsResponse;
 import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
+import com.woowahan.riders.spring.practice.blog.service.CommentOfPostService;
 import com.woowahan.riders.spring.practice.blog.service.DummyAuthenticatedService;
 import com.woowahan.riders.spring.practice.blog.service.PostPublishService;
 import com.woowahan.riders.spring.practice.blog.service.PostSubscriptionService;
@@ -36,6 +37,8 @@ public class WebBlogPostController {
     private PostSubscriptionService postSubscriptionService;
     @Autowired
     private PostPublishService postPublishService;
+    @Autowired
+    private CommentOfPostService commentOfPostService;
     @Autowired
     private DummyAuthenticatedService dummyAuthenticatedService;
 
@@ -70,7 +73,7 @@ public class WebBlogPostController {
     @RequestMapping(value = "{id}", method = GET)
     public String getPost(@PathVariable("id") Long id, Model model) {
         Post post = postSubscriptionService.readOne(id).orElseThrow(RuntimeException::new);
-        List<Comment> comments = postSubscriptionService.getCommentsOfPost(post);
+        List<Comment> comments = commentOfPostService.readComments(post);
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         return BLOG_POSTS_VIEW;

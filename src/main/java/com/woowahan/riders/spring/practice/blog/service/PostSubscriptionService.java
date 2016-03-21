@@ -16,6 +16,4 @@ public interface PostSubscriptionService {
 
     List<Post> readAll(String endpoint);
 
-    List<Comment> getCommentsOfPost(Post post);
-
 }

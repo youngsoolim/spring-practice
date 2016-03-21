@@ -18,15 +18,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by leejaeil on 2016. 3. 15..
@@ -38,6 +35,7 @@ import static org.junit.Assert.assertTrue;
 public class SimplePostServiceTest {
     PostPublishService postPublishService;
     PostSubscriptionService postSubscriptionService;
+    CommentOfPostService commentOfPostService;
     WriterRepository writerRepository;
     SiteRepository siteRepository;
     PostRepository postRepository;
@@ -46,12 +44,14 @@ public class SimplePostServiceTest {
     @Autowired
     public void init(PostPublishService publishService,
                      PostSubscriptionService postSubscriptionService,
+                     CommentOfPostService commentOfPostService,
                      WriterRepository writerRepository,
                      SiteRepository siteRepository,
                      PostRepository postRepository,
                      CommentRepository commentRepository) {
         this.postPublishService = publishService;
         this.postSubscriptionService = postSubscriptionService;
+        this.commentOfPostService = commentOfPostService;
         this.writerRepository = writerRepository;
         this.siteRepository = siteRepository;
         this.postRepository = postRepository;
@@ -130,7 +130,7 @@ public class SimplePostServiceTest {
         Comment comment2 = commentRepository.save(Comment.of(post2, "wow comment2"));
         Assert.notNull(comment1.getId());
         // When
-        List<Comment> comments = postSubscriptionService.getCommentsOfPost(post1);
+        List<Comment> comments = commentOfPostService.readComments(post1);
         // Then
         assertThat(comments.size(), is(1));
         assertTrue(comments.contains(comment1));

@@ -40,11 +40,6 @@ public class PostSubscriptionServiceTest {
                 return null;
             }
 
-            @Override
-            public List<Comment> getCommentsOfPost(Post post) {
-                return null;
-            }
-
         };
     }
 
