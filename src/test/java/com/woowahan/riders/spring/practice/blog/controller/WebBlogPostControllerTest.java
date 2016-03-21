@@ -118,4 +118,18 @@ public class WebBlogPostControllerTest {
         assertThat(postElement.querySelector("dd._title").getTextContent(), is("t"));
         assertThat(postElement.querySelector("pre._content").getTextContent(), is("c"));
     }
+
+    @Test
+    public void testGetCommentsOfPost() throws Exception {
+        // Given
+        // When
+        HtmlPage postPage = webClient.getPage("http://localhost/sonegy/posts/" + 1);
+        // Then
+        assertThat(postPage, is(notNullValue()));
+        HtmlElement postElement = postPage.getHtmlElementById("post");
+        assertThat(postElement.querySelector("dd._title").getTextContent(), is("title1"));
+        assertThat(postElement.querySelector("pre._content").getTextContent(), is("content1"));
+        HtmlElement commentsElement = postPage.getHtmlElementById("comments");
+        assertThat(commentsElement.querySelector("li._content").getTextContent(), is("comment content1"));
+    }
 }

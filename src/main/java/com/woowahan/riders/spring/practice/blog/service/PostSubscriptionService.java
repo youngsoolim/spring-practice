@@ -1,5 +1,6 @@
 package com.woowahan.riders.spring.practice.blog.service;
 
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Site;
 
@@ -14,4 +15,7 @@ public interface PostSubscriptionService {
     Optional<Post> readOne(Long postId);
 
     List<Post> readAll(String endpoint);
+
+    List<Comment> getCommentsOfPost(Post post);
+
 }

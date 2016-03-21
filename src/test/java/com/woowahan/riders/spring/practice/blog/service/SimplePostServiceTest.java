@@ -1,9 +1,11 @@
 package com.woowahan.riders.spring.practice.blog.service;
 
 import com.woowahan.riders.spring.practice.SpringPracticeApplication;
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Site;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
+import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
 import com.woowahan.riders.spring.practice.blog.repository.PostRepository;
 import com.woowahan.riders.spring.practice.blog.repository.SiteRepository;
 import com.woowahan.riders.spring.practice.blog.repository.WriterRepository;
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -38,18 +41,21 @@ public class SimplePostServiceTest {
     WriterRepository writerRepository;
     SiteRepository siteRepository;
     PostRepository postRepository;
+    CommentRepository commentRepository;
 
     @Autowired
     public void init(PostPublishService publishService,
                      PostSubscriptionService postSubscriptionService,
                      WriterRepository writerRepository,
                      SiteRepository siteRepository,
-                     PostRepository postRepository) {
+                     PostRepository postRepository,
+                     CommentRepository commentRepository) {
         this.postPublishService = publishService;
         this.postSubscriptionService = postSubscriptionService;
         this.writerRepository = writerRepository;
         this.siteRepository = siteRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Test
@@ -109,5 +115,25 @@ public class SimplePostServiceTest {
         List<Post> posts = postSubscriptionService.readAll(endpoint);
         // Then
         assertThat(posts.size(), is(4));
+    }
+
+    @Test
+    public void testReadCommentsOfPost() throws Exception {
+        // Given
+        Writer writer = writerRepository.save(new Writer());
+        Site site = siteRepository.save(Site.of(writer, "sonegy"));
+        String title = "title";
+        String content = "content";
+        Post post1 = postRepository.save(Post.of(writer, site, title, content));
+        Post post2 = postRepository.save(Post.of(writer, site, title, content));
+        Comment comment1 = commentRepository.save(Comment.of(post1, "wow comment"));
+        Comment comment2 = commentRepository.save(Comment.of(post2, "wow comment2"));
+        Assert.notNull(comment1.getId());
+        // When
+        List<Comment> comments = postSubscriptionService.getCommentsOfPost(post1);
+        // Then
+        assertThat(comments.size(), is(1));
+        assertTrue(comments.contains(comment1));
+        assertFalse(comments.contains(comment2));
     }
 }

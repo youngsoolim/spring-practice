@@ -10,5 +10,12 @@
         <dt>제목</dt><dd class="_title" th:text="${post.title}"></dd>
         <dt>내용</dt><dd><pre class="_content" th:text="${post.content}"></pre></dd>
     </dl>
+
+    <dl id="comments">
+        <ul>
+            <!--/*@thymesVar id="comments" type="java.util.List"*/-->
+            <li class="_content" th:each="i : ${comments}" th:text="${i.content}" />
+        </ul>
+    </dl>
 </body>
 </html>

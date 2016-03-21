@@ -2,6 +2,7 @@ package com.woowahan.riders.spring.practice.blog.service;
 
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.woowahan.riders.spring.practice.blog.domain.*;
+import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
 import com.woowahan.riders.spring.practice.blog.repository.PostRepository;
 import com.woowahan.riders.spring.practice.blog.repository.SiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private CommentRepository commentRepository;
     @Autowired
     private SiteRepository siteRepository;
     @PersistenceContext
@@ -51,5 +54,10 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
                 .innerJoin(post.site, site)
                 .where(site.endpoint.eq(endpoint))
                 .list(post);
+    }
+
+    @Override
+    public List<Comment> getCommentsOfPost(Post post) {
+        return commentRepository.findByPost(post);
     }
 }

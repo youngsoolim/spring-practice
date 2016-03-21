@@ -3,6 +3,7 @@ package com.woowahan.riders.spring.practice.blog.controller;
 import com.woowahan.riders.spring.practice.blog.controller.dto.PostRequest;
 import com.woowahan.riders.spring.practice.blog.controller.dto.PostResponse;
 import com.woowahan.riders.spring.practice.blog.controller.dto.PostsResponse;
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
 import com.woowahan.riders.spring.practice.blog.service.DummyAuthenticatedService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -68,7 +70,9 @@ public class WebBlogPostController {
     @RequestMapping(value = "{id}", method = GET)
     public String getPost(@PathVariable("id") Long id, Model model) {
         Post post = postSubscriptionService.readOne(id).orElseThrow(RuntimeException::new);
+        List<Comment> comments = postSubscriptionService.getCommentsOfPost(post);
         model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
         return BLOG_POSTS_VIEW;
     }
 }

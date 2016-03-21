@@ -1,5 +1,6 @@
 package com.woowahan.riders.spring.practice.blog.service;
 
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Site;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
@@ -38,6 +39,12 @@ public class PostSubscriptionServiceTest {
             public List<Post> readAll(String endpoint) {
                 return null;
             }
+
+            @Override
+            public List<Comment> getCommentsOfPost(Post post) {
+                return null;
+            }
+
         };
     }
 
