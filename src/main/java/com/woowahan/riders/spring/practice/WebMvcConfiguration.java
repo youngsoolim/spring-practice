@@ -7,6 +7,7 @@ import org.springframework.boot.context.web.OrderedHttpPutFormContentFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate4.support.OpenSessionInterceptor;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {WebMvcConfiguration.class})
 public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
-
     @Bean
     @ConditionalOnMissingBean(HiddenHttpMethodFilter.class)
     public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
