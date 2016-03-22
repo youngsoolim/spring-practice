@@ -12,6 +12,7 @@ import com.woowahan.riders.spring.practice.blog.service.PostPublishService;
 import com.woowahan.riders.spring.practice.blog.service.PostSubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,12 +68,12 @@ public class WebBlogPostController {
         Writer writer = dummyAuthenticatedService.getWriterBy(endpoint);
         return postPublishService.writePost(writer, endpoint, post.getTitle(), post.getContent())
                 .map(preset -> new RedirectView(String.valueOf(preset.getId())))
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(NotFoundPostException::new);
     }
 
     @RequestMapping(value = "{id}", method = GET)
     public String getPost(@PathVariable("id") Long id, Model model) {
-        Post post = postSubscriptionService.readOne(id).orElseThrow(RuntimeException::new);
+        Post post = postSubscriptionService.readOne(id).orElseThrow(NotFoundPostException::new);
         List<Comment> comments = commentOfPostService.readComments(post);
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);

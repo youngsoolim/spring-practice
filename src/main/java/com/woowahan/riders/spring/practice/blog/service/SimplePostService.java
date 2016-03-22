@@ -34,14 +34,14 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
     public Optional<Post> writePost(Writer writer, String endpoint, String title, String content) {
         QSite site = QSite.site;
         Site endpointSite = siteRepository.findOne(site.endpoint.eq(endpoint));
-        return Optional.of(postRepository.save(Post.of(writer, endpointSite, title, content)));
+        return Optional.ofNullable(postRepository.save(Post.of(writer, endpointSite, title, content)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Post> readOne(Long id) {
         QPost post = QPost.post;
-        return Optional.of(postRepository.findOne(post.id.eq(id)));
+        return Optional.ofNullable(postRepository.findOne(post.id.eq(id)));
     }
 
     @Override
