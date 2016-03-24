@@ -1,6 +1,7 @@
 package com.woowahan.riders.spring.practice.blog.controller;
 
 import com.woowahan.riders.spring.practice.blog.controller.dto.*;
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
 import com.woowahan.riders.spring.practice.blog.service.CommentOfPostService;
@@ -75,6 +76,7 @@ public class WebBlogPostController {
                 .collect(Collectors.toList()));
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
+        model.addAttribute("newComment", CommentRequest.empty());
         return BLOG_POSTS_VIEW;
     }
 }

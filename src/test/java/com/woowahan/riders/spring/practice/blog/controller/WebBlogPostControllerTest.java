@@ -132,4 +132,22 @@ public class WebBlogPostControllerTest {
         HtmlElement commentsElement = postPage.getHtmlElementById("comments");
         assertThat(commentsElement.querySelector("li._content").getTextContent(), is("comment content1"));
     }
+
+    @Test
+    public void 댓글_작성_폼() throws Exception {
+        //Given
+        Writer writer = dummyAuthenticatedService.getWriterBy("sonegy");
+        Post post = postPublishService.writePost(writer, "sonegy", "t", "c").orElseThrow(RuntimeException::new);
+
+        //When
+        HtmlPage postPage = webClient.getPage("http://localhost/sonegy/posts/" + post.getId());
+        HtmlForm form = postPage.getHtmlElementById("commentForm");
+        HtmlTextArea content = form.getTextAreaByName("content");
+        HtmlSubmitInput submit = form.getOneHtmlElementByAttribute("input", "type", "submit");
+
+        //Then
+        assertThat(content, is(notNullValue()));
+        assertThat(submit, is(notNullValue()));
+    }
+
 }
