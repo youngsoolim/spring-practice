@@ -80,9 +80,9 @@ public class WebBlogPostController {
     }
 
     @RequestMapping(value = "{id}/comment", method = POST)
-    public RedirectView writeComment(@PathVariable("endpoint") String endpoint, @PathVariable("id") Long id, CommentRequest comment) {
-        Post post = postSubscriptionService.readOne(id).orElseThrow(NotFoundPostException::new);
+    public RedirectView writeComment(@PathVariable("endpoint") String endpoint, @PathVariable("id") Long postId, CommentRequest comment) {
+        Post post = postSubscriptionService.readOne(postId).orElseThrow(NotFoundPostException::new);
         commentOfPostService.writeComment(post, comment.getContent());
-        return new RedirectView(String.format("/%s/posts/%s", endpoint,id), false);
+        return new RedirectView("../" + postId);
     }
 }
