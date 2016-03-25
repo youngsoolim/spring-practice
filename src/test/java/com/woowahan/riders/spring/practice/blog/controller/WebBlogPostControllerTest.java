@@ -5,6 +5,7 @@ import com.gargoylesoftware.htmlunit.html.*;
 import com.woowahan.riders.spring.practice.SpringPracticeApplication;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
+import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
 import com.woowahan.riders.spring.practice.blog.service.DummyAuthenticatedService;
 import com.woowahan.riders.spring.practice.blog.service.PostPublishService;
 import com.woowahan.riders.spring.practice.blog.service.PostSubscriptionService;
@@ -41,6 +42,8 @@ public class WebBlogPostControllerTest {
     PostSubscriptionService postSubscriptionService;
     @Autowired
     PostPublishService postPublishService;
+    @Autowired
+    CommentRepository commentRepository;
     @Autowired
     DummyAuthenticatedService dummyAuthenticatedService;
 
@@ -149,5 +152,30 @@ public class WebBlogPostControllerTest {
         assertThat(content, is(notNullValue()));
         assertThat(submit, is(notNullValue()));
     }
+
+    @Test
+    public void 댓글_작성() throws Exception {
+        //Given
+        Writer writer = dummyAuthenticatedService.getWriterBy("sonegy");
+        Post post = postPublishService.writePost(writer, "sonegy", "t", "c").orElseThrow(RuntimeException::new);
+        HtmlPage postPage = webClient.getPage("http://localhost/sonegy/posts/" + post.getId());
+        HtmlForm form = postPage.getHtmlElementById("commentForm");
+        HtmlTextArea content = form.getTextAreaByName("content");
+        HtmlSubmitInput submit = form.getOneHtmlElementByAttribute("input", "type", "submit");
+
+        int beforeCommentCount = post.getCommentList().size();
+
+        //When
+        content.setText("comment content");
+        HtmlPage newMessagePage = submit.click();
+
+        //Then
+        assertThat(newMessagePage.getUrl().toString(), is(startsWith("http://localhost/sonegy/posts/" + post.getId())));
+
+        int afterCommentCount = post.getCommentList().size();
+        assertThat(afterCommentCount, is(beforeCommentCount + 1));
+    }
+
+    // TODO: 댓글의 내용이 없는 경우의 테스트
 
 }

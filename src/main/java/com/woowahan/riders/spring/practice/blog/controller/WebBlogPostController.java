@@ -1,7 +1,6 @@
 package com.woowahan.riders.spring.practice.blog.controller;
 
 import com.woowahan.riders.spring.practice.blog.controller.dto.*;
-import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
 import com.woowahan.riders.spring.practice.blog.service.CommentOfPostService;
@@ -78,5 +77,12 @@ public class WebBlogPostController {
         model.addAttribute("comments", comments);
         model.addAttribute("newComment", CommentRequest.empty());
         return BLOG_POSTS_VIEW;
+    }
+
+    @RequestMapping(value = "{id}/comment", method = POST)
+    public RedirectView writeComment(@PathVariable("endpoint") String endpoint, @PathVariable("id") Long id, CommentRequest comment) {
+        Post post = postSubscriptionService.readOne(id).orElseThrow(NotFoundPostException::new);
+        commentOfPostService.writeComment(post, comment.getContent());
+        return new RedirectView(String.format("/%s/posts/%s", endpoint,id), false);
     }
 }
