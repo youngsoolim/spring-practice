@@ -19,7 +19,7 @@
     </dl>
 
     <!--/*@thymesVar id="newComment" type="com.woowahan.riders.spring.practice.blog.controller.dto.CommentRequest"*/-->
-    <form id="commentForm" action="#" method="POST" th:action="@{${post.id} + '/comment'}" th:object="${newComment}" th:method="POST">
+    <form id="commentForm" action="#" method="POST" th:action="@{{postId}/comment(postId=${post.id})}" th:object="${newComment}" th:method="POST">
         <dl>
             <dt>내용</dt><dd><textarea th:field="*{content}"></textarea></dd>
         </dl>
