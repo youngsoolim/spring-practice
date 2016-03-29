@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,7 +29,17 @@ public class CommentOfPostServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        commentOfPostService = post -> comments;
+        commentOfPostService = new CommentOfPostService() {
+            @Override
+            public List<Comment> readComments(Post post) {
+                return comments;
+            }
+
+            @Override
+            public Optional<Comment> writeComment(Post post, String content) {
+                return null;
+            }
+        };
     }
 
     @Test
