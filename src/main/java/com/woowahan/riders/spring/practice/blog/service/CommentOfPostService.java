@@ -14,5 +14,5 @@ public interface CommentOfPostService {
 
     Optional<Comment> writeComment(Post post, String content);
 
-    void deleteComment(Post post, Long commentId);
+    void deleteComment(Long postId, Long commentId);
 }

@@ -10,6 +10,7 @@ import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
 import com.woowahan.riders.spring.practice.blog.service.DummyAuthenticatedService;
 import com.woowahan.riders.spring.practice.blog.service.PostPublishService;
 import com.woowahan.riders.spring.practice.blog.service.PostSubscriptionService;
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -190,22 +192,18 @@ public class WebBlogPostControllerTest {
         //Given
         Writer writer = dummyAuthenticatedService.getWriterBy("sonegy");
         Post post = postPublishService.writePost(writer, "sonegy", "t", "c").orElseThrow(RuntimeException::new);
-        commentRepository.save(Comment.of(post, "comment content"));
+        Comment comment = commentRepository.save(Comment.of(post, "comment content"));
 
         HtmlPage postPage = webClient.getPage("http://localhost/sonegy/posts/" + post.getId());
         HtmlElement comments = postPage.getHtmlElementById("comments");
         HtmlForm deleteForm = comments.querySelector("li form");
         HtmlSubmitInput deleteSubmit = deleteForm.getOneHtmlElementByAttribute("input", "type", "submit");
 
-        int beforeCommentCount = post.getCommentList().size();
-
         //When
         HtmlPage deletedMessagePage = deleteSubmit.click();
 
         //Then
         assertThat(deletedMessagePage.getUrl().toString(), is(startsWith("http://localhost/sonegy/posts/")));
-
-        int afterCommentCount = post.getCommentList().size();
-        assertThat(afterCommentCount, is(beforeCommentCount - 1));
+        assertNull(commentRepository.findOne(comment.getId()));
     }
 }

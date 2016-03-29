@@ -149,7 +149,7 @@ public class SimplePostServiceTest {
         assertNotNull(comment);
 
         //When
-        commentOfPostService.deleteComment(post, comment.getId());
+        commentOfPostService.deleteComment(post.getId(), comment.getId());
 
         //Then
         assertThat(post.getCommentList().size(), is(0));

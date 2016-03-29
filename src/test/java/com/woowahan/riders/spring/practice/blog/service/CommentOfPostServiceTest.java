@@ -41,7 +41,7 @@ public class CommentOfPostServiceTest {
             }
 
             @Override
-            public void deleteComment(Post post, Long commentId) { }
+            public void deleteComment(Long postId, Long commentId) { }
         };
     }
 

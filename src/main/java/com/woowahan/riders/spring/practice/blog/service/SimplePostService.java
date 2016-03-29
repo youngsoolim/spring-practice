@@ -67,8 +67,9 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
     }
 
     @Override
-    public void deleteComment(Post post, Long commentId) {
+    public void deleteComment(Long postId, Long commentId) {
         commentRepository.delete(commentId);
+        Post post = postRepository.findOne(postId);
         post.removeComment(commentId);
     }
 }

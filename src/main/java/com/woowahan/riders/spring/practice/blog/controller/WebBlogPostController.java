@@ -93,10 +93,7 @@ public class WebBlogPostController {
 
     @RequestMapping(value = "{id}/comment/{commentId}", method = DELETE)
     public RedirectView deleteComment(@PathVariable("id") Long postId, @PathVariable("commentId") Long commentId) {
-        Post post = postSubscriptionService.readOne(postId).get();
-
-        commentOfPostService.deleteComment(post, commentId);
-
+        commentOfPostService.deleteComment(postId, commentId);
         return new RedirectView("../");
     }
 }
