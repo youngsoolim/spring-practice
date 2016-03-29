@@ -60,4 +60,9 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
     public List<Comment> readComments(Post post) {
         return commentRepository.findByPost(post);
     }
+
+    @Override
+    public Optional<Comment> writeComment(Post post, String content) {
+        return Optional.ofNullable(commentRepository.save(Comment.of(post, content)));
+    }
 }

@@ -17,5 +17,13 @@
             <li class="_content" th:each="i : ${comments.comments}" th:text="${i.content}" />
         </ul>
     </dl>
+
+    <!--/*@thymesVar id="newComment" type="com.woowahan.riders.spring.practice.blog.controller.dto.CommentRequest"*/-->
+    <form id="commentForm" action="#" method="POST" th:action="@{{postId}/comment(postId=${post.id})}" th:object="${newComment}" th:method="POST">
+        <dl>
+            <dt>내용</dt><dd><textarea th:field="*{content}"></textarea></dd>
+        </dl>
+        <input type="submit" />
+    </form>
 </body>
 </html>

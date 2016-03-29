@@ -75,6 +75,14 @@ public class WebBlogPostController {
                 .collect(Collectors.toList()));
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
+        model.addAttribute("newComment", CommentRequest.empty());
         return BLOG_POSTS_VIEW;
+    }
+
+    @RequestMapping(value = "{id}/comment", method = POST)
+    public RedirectView writeComment(@PathVariable("endpoint") String endpoint, @PathVariable("id") Long postId, CommentRequest comment) {
+        Post post = postSubscriptionService.readOne(postId).orElseThrow(NotFoundPostException::new);
+        commentOfPostService.writeComment(post, comment.getContent());
+        return new RedirectView("../" + postId);
     }
 }
