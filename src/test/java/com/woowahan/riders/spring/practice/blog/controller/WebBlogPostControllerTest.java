@@ -3,6 +3,7 @@ package com.woowahan.riders.spring.practice.blog.controller;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.woowahan.riders.spring.practice.SpringPracticeApplication;
+import com.woowahan.riders.spring.practice.blog.domain.Comment;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
 import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
@@ -13,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.web.OrderedHiddenHttpMethodFilter;
+import org.springframework.boot.context.web.OrderedHttpPutFormContentFilter;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -52,7 +55,11 @@ public class WebBlogPostControllerTest {
 
     @Before
     public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(new OrderedHiddenHttpMethodFilter())
+                .addFilter(new OrderedHttpPutFormContentFilter())
+                .build();
+
         webClient = MockMvcWebClientBuilder.mockMvcSetup(mockMvc).useMockMvcForHosts().build();
     }
 
@@ -133,7 +140,7 @@ public class WebBlogPostControllerTest {
         assertThat(postElement.querySelector("dd._title").getTextContent(), is("title1"));
         assertThat(postElement.querySelector("pre._content").getTextContent(), is("content1"));
         HtmlElement commentsElement = postPage.getHtmlElementById("comments");
-        assertThat(commentsElement.querySelector("li._content").getTextContent(), is("comment content1"));
+        assertThat(commentsElement.querySelector("li div._content").getTextContent(), is("comment content1"));
     }
 
     @Test
@@ -178,4 +185,27 @@ public class WebBlogPostControllerTest {
 
     // TODO: 댓글의 내용이 없는 경우의 테스트
 
+    @Test
+    public void 댓글_삭제() throws Exception {
+        //Given
+        Writer writer = dummyAuthenticatedService.getWriterBy("sonegy");
+        Post post = postPublishService.writePost(writer, "sonegy", "t", "c").orElseThrow(RuntimeException::new);
+        commentRepository.save(Comment.of(post, "comment content"));
+
+        HtmlPage postPage = webClient.getPage("http://localhost/sonegy/posts/" + post.getId());
+        HtmlElement comments = postPage.getHtmlElementById("comments");
+        HtmlForm deleteForm = comments.querySelector("li form");
+        HtmlSubmitInput deleteSubmit = deleteForm.getOneHtmlElementByAttribute("input", "type", "submit");
+
+        int beforeCommentCount = post.getCommentList().size();
+
+        //When
+        HtmlPage deletedMessagePage = deleteSubmit.click();
+
+        //Then
+        assertThat(deletedMessagePage.getUrl().toString(), is(startsWith("http://localhost/sonegy/posts/")));
+
+        int afterCommentCount = post.getCommentList().size();
+        assertThat(afterCommentCount, is(beforeCommentCount - 1));
+    }
 }

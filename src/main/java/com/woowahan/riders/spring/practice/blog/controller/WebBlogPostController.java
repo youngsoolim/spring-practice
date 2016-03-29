@@ -3,6 +3,7 @@ package com.woowahan.riders.spring.practice.blog.controller;
 import com.woowahan.riders.spring.practice.blog.controller.dto.*;
 import com.woowahan.riders.spring.practice.blog.domain.Post;
 import com.woowahan.riders.spring.practice.blog.domain.Writer;
+import com.woowahan.riders.spring.practice.blog.repository.CommentRepository;
 import com.woowahan.riders.spring.practice.blog.service.CommentOfPostService;
 import com.woowahan.riders.spring.practice.blog.service.DummyAuthenticatedService;
 import com.woowahan.riders.spring.practice.blog.service.PostPublishService;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -84,5 +86,17 @@ public class WebBlogPostController {
         Post post = postSubscriptionService.readOne(postId).orElseThrow(NotFoundPostException::new);
         commentOfPostService.writeComment(post, comment.getContent());
         return new RedirectView("../" + postId);
+    }
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @RequestMapping(value = "{id}/comment/{commentId}", method = DELETE)
+    public RedirectView deleteComment(@PathVariable("id") Long postId, @PathVariable("commentId") Long commentId) {
+        Post post = postSubscriptionService.readOne(postId).get();
+
+        commentOfPostService.deleteComment(post, commentId);
+
+        return new RedirectView("../");
     }
 }
