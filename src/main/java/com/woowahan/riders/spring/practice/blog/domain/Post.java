@@ -78,4 +78,8 @@ public class Post {
     public Site getSite() {
         return site;
     }
+
+    public void removeComment(Long commentId) {
+        commentList.removeIf(comment -> comment.getId() == commentId);
+    }
 }

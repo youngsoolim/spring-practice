@@ -136,4 +136,22 @@ public class SimplePostServiceTest {
         assertTrue(comments.contains(comment1));
         assertFalse(comments.contains(comment2));
     }
+
+    @Test
+    public void testDeleteCommentOfPost() throws Exception {
+        //Given
+        Writer writer = writerRepository.save(new Writer());
+        Site site = siteRepository.save(Site.of(writer, "sonegy"));
+        Post post = postRepository.save(Post.of(writer, site, "title", "content"));
+        Comment comment = commentOfPostService.writeComment(post, "comment content").get();
+
+        assertThat(post.getCommentList().size(), is(1));
+        assertNotNull(comment);
+
+        //When
+        commentOfPostService.deleteComment(post, comment.getId());
+
+        //Then
+        assertThat(post.getCommentList().size(), is(0));
+    }
 }

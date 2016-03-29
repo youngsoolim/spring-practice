@@ -13,4 +13,6 @@ public interface CommentOfPostService {
     List<Comment> readComments(Post post);
 
     Optional<Comment> writeComment(Post post, String content);
+
+    void deleteComment(Post post, Long commentId);
 }
