@@ -13,8 +13,14 @@
 
     <dl id="comments">
         <ul>
-            <!--/*@thymesVar id="comments" type="java.util.List"*/-->
-            <li class="_content" th:each="i : ${comments.comments}" th:text="${i.content}" />
+            <!--/*@thymesVar id="comments" type="com.woowahan.riders.spring.practice.blog.controller.dto.CommentsResponse"*/-->
+            <!--/*@thymesVar id="comment" type="com.woowahan.riders.spring.practice.blog.controller.dto.CommentResponse"*/-->
+            <li th:each="comment : ${comments.comments}">
+                <div class="_content" th:text="${comment.content}"></div>
+                <form class="_delete" th:action="@{{postId}/comment/{commentId}(postId=${post.id},commentId=${comment.id})}" th:method="delete">
+                    <input type="submit" />
+                </form>
+            </li>
         </ul>
     </dl>
 

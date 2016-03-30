@@ -39,6 +39,9 @@ public class CommentOfPostServiceTest {
             public Optional<Comment> writeComment(Post post, String content) {
                 return null;
             }
+
+            @Override
+            public void deleteComment(Long postId, Long commentId) { }
         };
     }
 

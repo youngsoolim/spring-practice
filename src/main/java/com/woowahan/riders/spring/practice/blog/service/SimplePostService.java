@@ -65,4 +65,11 @@ public class SimplePostService implements PostPublishService, PostSubscriptionSe
     public Optional<Comment> writeComment(Post post, String content) {
         return Optional.ofNullable(commentRepository.save(Comment.of(post, content)));
     }
+
+    @Override
+    public void deleteComment(Long postId, Long commentId) {
+        commentRepository.delete(commentId);
+        Post post = postRepository.findOne(postId);
+        post.removeComment(commentId);
+    }
 }
